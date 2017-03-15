@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zysm.curtain.mwidgetgroup.animscrollview.AnimScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.zysm.curtain.uidemo.MainActivity">
+    <com.zysm.curtain.mwidgetgroup.animscrollview.AnimLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:text="@string/main_description"
+                android:gravity="center"/>
+
+            <Button
+                android:id="@+id/m_refresh_list_view_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="01.下拉刷新，上拉加载更多ListView"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/test1"
+            app:discrollve_alpha="true"/>
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#007788"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            app:discrollve_scaleX="true"
+            app:discrollve_scaleY="true"
+            app:discrollve_alpha="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:padding="25dp"
+            android:gravity="center"
+            android:fontFamily="serif"
+            android:text="准备好相机，这里有很多美景！"
+            app:discrollve_alpha="true"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/test2"
+            app:discrollve_translation="fromLeft"
+            app:discrollve_alpha="true"
+            android:background="#ff0000"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/test2"
+            android:layout_gravity="center"
+            app:discrollve_translation="fromRight|fromBottom"
+            app:discrollve_alpha="true" />
+
+    
+    </com.zysm.curtain.mwidgetgroup.animscrollview.AnimLinearLayout>
+
+</com.zysm.curtain.mwidgetgroup.animscrollview.AnimScrollView>
