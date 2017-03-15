@@ -452,6 +452,7 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
                         onTouchEvent(cancelEvent);
                         if (mOnMenuStateChangeListener != null) {
                             mOnMenuStateChangeListener.onMenuClose(oldPos);
+
                         }
                         return true;
                     }
