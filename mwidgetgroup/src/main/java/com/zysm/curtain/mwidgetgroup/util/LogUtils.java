@@ -36,6 +36,11 @@ public class LogUtils {
             Log.i(tag, msg);
         }
     }
+    public static void d(String msg) {
+        if (isDebug) {
+            Log.i("TEMP", msg);
+        }
+    }
 
     public static void i(String tag, String msg) {
         if (isDebug) {

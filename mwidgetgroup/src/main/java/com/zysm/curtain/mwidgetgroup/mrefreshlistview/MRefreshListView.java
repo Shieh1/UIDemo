@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.zysm.curtain.mwidgetgroup.R;
 import com.zysm.curtain.mwidgetgroup.util.DensityUtils;
+import com.zysm.curtain.mwidgetgroup.util.LogUtils;
 
 /**
  * Time:2017/3/15 13:57
@@ -25,6 +26,11 @@ import com.zysm.curtain.mwidgetgroup.util.DensityUtils;
  */
 
 public class MRefreshListView extends ListView implements AbsListView.OnScrollListener{
+
+    /**modify*/
+
+    private float mDownRowX;
+    private float mDownRowY;
 
     /**swipeList*/
 
@@ -34,6 +40,19 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
 
     public static final int DIRECTION_LEFT = 1;
     public static final int DIRECTION_RIGHT = -1;
+
+    private SwipeMenuLayout mTouchView;
+    private int mTouchPosition;
+    private float mDownX;//按下时候的相对控件的x坐标
+    private float mDownY;//按下时候的相对控件的y坐标
+    private int mTouchState;
+    private int mDirection = 1;//swipe from right to left by default
+    private OnSwipeListener mOnSwipeListener;
+    private SwipeMenuCreator mMenuCreator;
+    private OnMenuItemClickListener mOnMenuItemClickListener;
+    private OnMenuStateChangeListener mOnMenuStateChangeListener;
+    private Interpolator mCloseInterpolator;
+    private Interpolator mOpenInterpolator;
 
     /**refreshList*/
     private Context mContext;
@@ -331,18 +350,7 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
             mListViewListener.onLoadMore();
         }
     }
-    private SwipeMenuLayout mTouchView;
-    private int mTouchPosition;
-    private float mDownX;
-    private float mDownY;
-    private int mTouchState;
-    private int mDirection = 1;//swipe from right to left by default
-    private OnSwipeListener mOnSwipeListener;
-    private SwipeMenuCreator mMenuCreator;
-    private OnMenuItemClickListener mOnMenuItemClickListener;
-    private OnMenuStateChangeListener mOnMenuStateChangeListener;
-    private Interpolator mCloseInterpolator;
-    private Interpolator mOpenInterpolator;
+
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -376,6 +384,7 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
                 }
                 return handled;
             case MotionEvent.ACTION_MOVE:
+
                 float dy = Math.abs((ev.getY() - mDownY));
                 float dx = Math.abs((ev.getX() - mDownX));
                 if (Math.abs(dy) > MAX_Y || Math.abs(dx) > MAX_X) {
@@ -396,6 +405,9 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
         return super.onInterceptTouchEvent(ev);
     }
 
+    private float lastRowX;//记录上次的位置，用于move不松开时判断如何滑动
+    private float lastRowY;
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (mLastY == -1) {
@@ -406,6 +418,12 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
 
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                mDownRowX = ev.getRawX();
+                mDownRowY = ev.getRawY();
+                lastRowX = mDownRowX;
+                lastRowY = mDownRowY;
+                LogUtils.d("mDownRowX="+mDownRowX);
+                LogUtils.d("mDownRowY="+mDownRowY);
                 mLastY = ev.getRawY();
                 if(mSideEnable) {
                     int oldPos = mTouchPosition;
@@ -447,6 +465,25 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
+
+                float divy = ev.getRawY() - mDownRowY;
+                float divx = ev.getRawX() - mDownRowX;
+//                LogUtils.d("divy = " + divy);
+//                LogUtils.d("divx = " + divx);
+                if( ev.getRawY() > lastRowY){
+                    //下拉的幅度大于左右拉的幅度，表示是下拉刷新
+                    LogUtils.d("down");
+                }else if( ev.getRawY() < lastRowY){
+                    //表示是上拉
+                    LogUtils.d("up");
+                }else if( ev.getRawX() < lastRowX){
+                    //向左滑动
+                    LogUtils.d("left");
+                }else if( ev.getRawX() > lastRowX){
+                    //向右滑动
+                    LogUtils.d("right");
+                }
+
                     final float deltaY = ev.getRawY() - mLastY;
                     mLastY = ev.getRawY();
                     if (getFirstVisiblePosition() == 0
