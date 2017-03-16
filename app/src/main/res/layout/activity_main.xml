@@ -31,6 +31,12 @@
                 android:layout_height="wrap_content"
                 android:text="02.下拉刷新Scrollview"/>
 
+            <Button
+                android:id="@+id/m_bottom_date_picker_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="03.底部日期选择对话框"/>
+
         </LinearLayout>
 
         <ImageView

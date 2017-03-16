@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MRefreshListViewActivity" />
-        <activity android:name=".MRefreshScrollViewActivity"></activity>
+        <activity android:name=".MRefreshScrollViewActivity" />
+        <activity android:name=".DatePickDialogActivity"></activity>
     </application>
 
 </manifest>
