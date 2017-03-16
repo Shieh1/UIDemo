@@ -1,6 +1,7 @@
 package com.zysm.curtain.mwidgetgroup.mrefreshlistview;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -95,6 +96,9 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
     private final static float OFFSET_RADIO = 1.8f; // support iOS like pull
     // feature.
 
+    private int MAX_Y = 5;
+    private int MAX_X = 3;
+
     /**是否侧滑*/
     private boolean mSideEnable = false;
 
@@ -113,6 +117,9 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
 
         //初始化为尾布局
         initFooterView(context);
+        MAX_X = dp2px(MAX_X);
+        MAX_Y = dp2px(MAX_Y);
+        mTouchState = TOUCH_STATE_NONE;
     }
 
 
@@ -192,20 +199,6 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
         return mCloseInterpolator;
     }
 
-
-    /**
-     * 打开或者关闭侧滑菜单
-     *
-     * @param enable
-     */
-    private int MAX_Y = 5;
-    private int MAX_X = 3;
-    public void setSideMenuEnable(boolean enable) {
-        mSideEnable = enable;
-        MAX_X = dp2px(MAX_X);
-        MAX_Y = dp2px(MAX_Y);
-        mTouchState = TOUCH_STATE_NONE;
-    }
 
     /**
      * 打开或者关闭下拉刷新
@@ -351,7 +344,7 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
         }
     }
 
-
+/**
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         //在拦截处处理，在滑动设置了点击事件的地方也能swip，点击时又不能影响原来的点击事件
@@ -403,164 +396,92 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
                 }
         }
         return super.onInterceptTouchEvent(ev);
-    }
-
-    private float lastRowX;//记录上次的位置，用于move不松开时判断如何滑动
-    private float lastRowY;
+    }**/
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (mLastY == -1) {
             mLastY = ev.getRawY();
         }
-        if (ev.getAction() != MotionEvent.ACTION_DOWN && mTouchView == null)
-            return super.onTouchEvent(ev);
 
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mDownRowX = ev.getRawX();
-                mDownRowY = ev.getRawY();
-                lastRowX = mDownRowX;
-                lastRowY = mDownRowY;
-                LogUtils.d("mDownRowX="+mDownRowX);
-                LogUtils.d("mDownRowY="+mDownRowY);
                 mLastY = ev.getRawY();
-                if(mSideEnable) {
-                    int oldPos = mTouchPosition;
-                    mDownX = ev.getX();
-                    mDownY = ev.getY();
-                    mTouchState = TOUCH_STATE_NONE;
 
-                    mTouchPosition = pointToPosition((int) ev.getX(), (int) ev.getY());
+                int oldPos = mTouchPosition;
+                mDownX = ev.getX();
+                mDownY = ev.getY();
+                mTouchState = TOUCH_STATE_NONE;
 
-                    if (mTouchPosition == oldPos && mTouchView != null
-                            && mTouchView.isOpen()) {
-                        mTouchState = TOUCH_STATE_X;
-                        mTouchView.onSwipe(ev);
-                        return true;
-                    }
+                mTouchPosition = pointToPosition((int) ev.getX(), (int) ev.getY());
 
-                    View view = getChildAt(mTouchPosition - getFirstVisiblePosition());
-
-                    if (mTouchView != null && mTouchView.isOpen()) {
-                        mTouchView.smoothCloseMenu();
-                        mTouchView = null;
-                        // return super.onTouchEvent(ev);
-                        // try to cancel the touch event
-                        MotionEvent cancelEvent = MotionEvent.obtain(ev);
-                        cancelEvent.setAction(MotionEvent.ACTION_CANCEL);
-                        onTouchEvent(cancelEvent);
-                        if (mOnMenuStateChangeListener != null) {
-                            mOnMenuStateChangeListener.onMenuClose(oldPos);
-
-                        }
-                        return true;
-                    }
-                    if (view instanceof SwipeMenuLayout) {
-                        mTouchView = (SwipeMenuLayout) view;
-                        mTouchView.setSwipeDirection(mDirection);
-                    }
-                    if (mTouchView != null) {
-                        mTouchView.onSwipe(ev);
-                    }
+                if (mTouchPosition == oldPos && mTouchView != null && mTouchView.isOpen()) {
+                    mTouchState = TOUCH_STATE_X;
+                    mTouchView.onSwipe(ev);
+                    return true;
                 }
+
+                View view = getChildAt(mTouchPosition - getFirstVisiblePosition());
+
+                if (mTouchView != null && mTouchView.isOpen()) {
+                    mTouchView.smoothCloseMenu();
+                    mTouchView = null;
+                    return super.onTouchEvent(ev);
+                }
+                if (view instanceof SwipeMenuLayout) {
+                    mTouchView = (SwipeMenuLayout) view;
+                }
+                if (mTouchView != null) {
+                    mTouchView.onSwipe(ev);
+                }
+
                 break;
             case MotionEvent.ACTION_MOVE:
+                final float deltaY = ev.getRawY() - mLastY;
 
-                float divy = ev.getRawY() - mDownRowY;
-                float divx = ev.getRawX() - mDownRowX;
-//                LogUtils.d("divy = " + divy);
-//                LogUtils.d("divx = " + divx);
-                if( ev.getRawY() > lastRowY){
-                    //下拉的幅度大于左右拉的幅度，表示是下拉刷新
-                    LogUtils.d("down");
-                }else if( ev.getRawY() < lastRowY){
-                    //表示是上拉
-                    LogUtils.d("up");
-                }else if( ev.getRawX() < lastRowX){
-                    //向左滑动
-                    LogUtils.d("left");
-                }else if( ev.getRawX() > lastRowX){
-                    //向右滑动
-                    LogUtils.d("right");
-                }
+                float dy = Math.abs((ev.getY() - mDownY));
+                float dx = Math.abs((ev.getX() - mDownX));
+                mLastY = ev.getRawY();
 
-                    final float deltaY = ev.getRawY() - mLastY;
-                    mLastY = ev.getRawY();
-                    if (getFirstVisiblePosition() == 0
-                            && (headView.getVisiableHeight() > 0 || deltaY > 0)) {
+                if ((mTouchView == null || !mTouchView.isActive()) && Math.pow(dx, 2) / Math.pow(dy, 2) <= 3) {
+                    if (getFirstVisiblePosition() == 0 && (headView.getVisiableHeight() > 0 || deltaY > 0)) {
                         // the first item is showing, header has shown or pull down.
                         updateHeaderHeight(deltaY / OFFSET_RADIO);
                         invokeOnScrolling();
-                    } else if (getLastVisiblePosition() == mTotalItemCount - 1
-                            && (mFooterView.getBottomMargin() > 0 || deltaY < 0)) {
+                    } else if ((mFooterView.getBottomMargin() > 0 || deltaY < 0)) {
                         // last item, already pulled up or want to pull up.
                         updateFooterHeight(-deltaY / OFFSET_RADIO);
                     }
+                }
 
-                if(mSideEnable){
-                    //有些可能有header,要减去header再判断
-                    mTouchPosition = pointToPosition((int) ev.getX(), (int) ev.getY()) - getHeaderViewsCount();
-                    //如果滑动了一下没完全展现，就收回去，这时候mTouchView已经赋值，再滑动另外一个不可以swip的view
-                    //会导致mTouchView swip 。 所以要用位置判断是否滑动的是一个view
-                    if (!mTouchView.getSwipEnable() || mTouchPosition != mTouchView.getPosition()) {
-                        break;
+                if (mTouchState == TOUCH_STATE_X) {
+                    if (mTouchView != null) {
+                        mTouchView.onSwipe(ev);
                     }
-                    float dy = Math.abs((ev.getY() - mDownY));
-                    float dx = Math.abs((ev.getX() - mDownX));
-                    if (mTouchState == TOUCH_STATE_X) {
-                        if (mTouchView != null) {
-                            mTouchView.onSwipe(ev);
-                        }
-                        getSelector().setState(new int[]{0});
-                        ev.setAction(MotionEvent.ACTION_CANCEL);
-                        super.onTouchEvent(ev);
-                        return true;
-                    } else if (mTouchState == TOUCH_STATE_NONE) {
-                        if (Math.abs(dy) > MAX_Y) {
-                            mTouchState = TOUCH_STATE_Y;
-                        } else if (dx > MAX_X) {
-                            mTouchState = TOUCH_STATE_X;
-                            if (mOnSwipeListener != null) {
-                                mOnSwipeListener.onSwipeStart(mTouchPosition);
-                            }
+                    getSelector().setState(new int[] { 0 });
+                    ev.setAction(MotionEvent.ACTION_CANCEL);
+                    super.onTouchEvent(ev);
+                    return true;
+                } else if (mTouchState == TOUCH_STATE_NONE) {
+                    if (Math.abs(dy) > MAX_Y) {
+                        mTouchState = TOUCH_STATE_Y;
+                    } else if (dx > MAX_X) {
+                        mTouchState = TOUCH_STATE_X;
+                        if (mOnSwipeListener != null) {
+                            mOnSwipeListener.onSwipeStart(mTouchPosition);
                         }
                     }
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if(mSideEnable){
-                    if (mTouchState == TOUCH_STATE_X) {
-                        if (mTouchView != null) {
-                            boolean isBeforeOpen = mTouchView.isOpen();
-                            mTouchView.onSwipe(ev);
-                            boolean isAfterOpen = mTouchView.isOpen();
-                            if (isBeforeOpen != isAfterOpen && mOnMenuStateChangeListener != null) {
-                                if (isAfterOpen) {
-                                    mOnMenuStateChangeListener.onMenuOpen(mTouchPosition);
-                                } else {
-                                    mOnMenuStateChangeListener.onMenuClose(mTouchPosition);
-                                }
-                            }
-                            if (!isAfterOpen) {
-                                mTouchPosition = -1;
-                                mTouchView = null;
-                            }
-                        }
-                        if (mOnSwipeListener != null) {
-                            mOnSwipeListener.onSwipeEnd(mTouchPosition);
-                        }
-                        ev.setAction(MotionEvent.ACTION_CANCEL);
-                        super.onTouchEvent(ev);
-                        return true;
-                    }
-                }
-            default:
                 mLastY = -1; // reset
-                if (getFirstVisiblePosition() == 0) {
+                if (mEnablePullLoad && mFooterView.getBottomMargin() > PULL_LOAD_MORE_DELTA) {
+                    startLoadMore();
+                    resetFooterHeight();
+                    new ResetHeaderHeightTask().execute();
+                } else if (getFirstVisiblePosition() == 0) {
                     // invoke refresh
-                    if (mEnablePullRefresh
-                            && headView.getVisiableHeight() > mHeaderViewHeight) {
+                    if (mEnablePullRefresh && headView.getVisiableHeight() > mHeaderViewHeight) {
                         mPullRefreshing = true;
                         headView.setState(MListViewHeader.STATE_REFRESHING);
                         if (mListViewListener != null) {
@@ -569,17 +490,42 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
                     }
                     resetHeaderHeight();
                 }
-                if (getLastVisiblePosition() == mTotalItemCount - 1) {
-                    // invoke load more.
-                    if (mEnablePullLoad
-                            && mFooterView.getBottomMargin() > PULL_LOAD_MORE_DELTA) {
-                        startLoadMore();
+
+                if (mTouchState == TOUCH_STATE_X) {
+                    if (mTouchView != null) {
+                        mTouchView.onSwipe(ev);
+                        if (!mTouchView.isOpen()) {
+                            mTouchPosition = -1;
+                            mTouchView = null;
+                        }
                     }
-                    resetFooterHeight();
+                    if (mOnSwipeListener != null) {
+                        mOnSwipeListener.onSwipeEnd(mTouchPosition);
+                    }
+                    ev.setAction(MotionEvent.ACTION_CANCEL);
+                    super.onTouchEvent(ev);
+                    return true;
                 }
                 break;
         }
         return super.onTouchEvent(ev);
+    }
+
+    class ResetHeaderHeightTask extends AsyncTask<Void, Void, Void> {
+        protected Void doInBackground(Void... params) {
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            mPullRefreshing = false;
+            headView.setState(MListViewHeader.STATE_NORMAL);
+            resetHeaderHeight();
+        }
     }
 
     @Override
@@ -641,8 +587,7 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
     }
 
     public void smoothOpenMenu(int position) {
-        if (position >= getFirstVisiblePosition()
-                && position <= getLastVisiblePosition()) {
+        if (position >= getFirstVisiblePosition() && position <= getLastVisiblePosition()) {
             View view = getChildAt(position - getFirstVisiblePosition());
             if (view instanceof SwipeMenuLayout) {
                 mTouchPosition = position;
@@ -650,7 +595,6 @@ public class MRefreshListView extends ListView implements AbsListView.OnScrollLi
                     mTouchView.smoothCloseMenu();
                 }
                 mTouchView = (SwipeMenuLayout) view;
-                mTouchView.setSwipeDirection(mDirection);
                 mTouchView.smoothOpenMenu();
             }
         }

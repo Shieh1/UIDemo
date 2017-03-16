@@ -51,7 +51,6 @@ public class MRefreshListViewActivity extends AppCompatActivity implements MRefr
         mListView.setAdapter(mAdapter);
         mListView.setMListViewListener(this);
         mHandler = new Handler();
-        mListView.setSideMenuEnable(true);
         initSwipeMenu();
     }
 
