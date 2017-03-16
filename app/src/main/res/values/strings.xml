@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UIDemo</string>
+    <string name="refresh_scrollview_abstract">该控件是下拉刷新scrollview控件，只截取刷新ScrollView的片段，还有ListView，分组ListView 等刷新的控件，源码来自 https://github.com/chrisbanes/Android-PullToRefresh.</string>
 </resources>

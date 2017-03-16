@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MRefreshListViewActivity"></activity>
+        <activity android:name=".MRefreshListViewActivity" />
+        <activity android:name=".MRefreshScrollViewActivity"></activity>
     </application>
 
 </manifest>

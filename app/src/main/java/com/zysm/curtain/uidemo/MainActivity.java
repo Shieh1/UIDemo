@@ -26,11 +26,15 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
     }
 
-    @OnClick({R.id.m_refresh_list_view_button})
+    @OnClick({R.id.m_refresh_list_view_button,
+            R.id.m_refresh_scroll_view_button})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.m_refresh_list_view_button:
                 ToActivityUtil.toNextActivity(mContext, MRefreshListViewActivity.class);
+                break;
+            case R.id.m_refresh_scroll_view_button:
+                ToActivityUtil.toNextActivity(mContext, MRefreshScrollViewActivity.class);
                 break;
         }
     }
