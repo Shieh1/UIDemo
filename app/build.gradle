@@ -26,6 +26,9 @@ dependencies {
     })
     compile project(':mwidgetgroup')
 
+    compile('com.alibaba.android:vlayout:1.0.2@aar') {
+        transitive = true
+    }
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
     compile 'com.jakewharton:butterknife:8.5.1'
