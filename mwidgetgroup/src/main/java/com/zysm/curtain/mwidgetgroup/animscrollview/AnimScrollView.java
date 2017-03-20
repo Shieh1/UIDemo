@@ -35,7 +35,7 @@ public class AnimScrollView extends ScrollView {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         View first = mContent.getChildAt(0);
-        first.getLayoutParams().height = getHeight();
+        //first.getLayoutParams().height = getHeight();
     }
 
     @Override

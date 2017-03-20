@@ -38,6 +38,12 @@
                 android:text="03.底部日期选择对话框"/>
 
             <Button
+                android:id="@+id/m_dialog_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="04.对话框"/>
+
+            <Button
                 android:id="@+id/m_test_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
