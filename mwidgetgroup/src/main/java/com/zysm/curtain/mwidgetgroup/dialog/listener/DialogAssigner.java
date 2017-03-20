@@ -2,7 +2,6 @@ package com.zysm.curtain.mwidgetgroup.dialog.listener;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
@@ -28,24 +27,6 @@ public class DialogAssigner implements Assignable {
             instance = new DialogAssigner();
         }
         return instance;
-    }
-
-
-    @Override
-    public BuildBean assignDatePick(Context context, int gravity, String dateTitle, long date, int dateType, int tag, DialogUIDateTimeSaveListener listener) {
-        BuildBean bean = new BuildBean();
-        bean.mContext = context;
-        bean.dateTitle = dateTitle;
-        bean.gravity = gravity;
-        bean.cancelable = true;
-        bean.outsideTouchable = true;
-        bean.type = CommonConfig.TYPE_DATEPICK;
-        bean.dateTimeListener = listener;
-        bean.dateType = dateType;
-        bean.date = date;
-        bean.tag = tag;
-        Log.d("TEST","dateType==="+dateType);
-        return bean;
     }
 
     @Override

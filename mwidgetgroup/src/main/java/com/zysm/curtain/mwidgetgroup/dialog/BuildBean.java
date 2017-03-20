@@ -10,7 +10,6 @@ import android.view.View;
 import com.zysm.curtain.mwidgetgroup.dialog.adapter.SuperAdapter;
 import com.zysm.curtain.mwidgetgroup.dialog.config.CommonConfig;
 import com.zysm.curtain.mwidgetgroup.dialog.listener.Buildable;
-import com.zysm.curtain.mwidgetgroup.dialog.listener.DialogUIDateTimeSaveListener;
 import com.zysm.curtain.mwidgetgroup.dialog.listener.DialogUIItemListener;
 import com.zysm.curtain.mwidgetgroup.dialog.listener.DialogUIListener;
 import com.zysm.curtain.mwidgetgroup.dialog.listener.Styleable;
@@ -72,7 +71,6 @@ public class BuildBean extends Buildable implements Styleable {
 
 
     public DialogUIListener listener;
-    public DialogUIDateTimeSaveListener dateTimeListener;
     public DialogUIItemListener itemListener;
 
     /**

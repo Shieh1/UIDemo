@@ -32,11 +32,6 @@ import java.util.List;
 public interface Assignable {
 
     /**
-     * 日期选择器
-     */
-    BuildBean assignDatePick(Context context, int gravity, String dateTitle, long date, int dateType, int tag, DialogUIDateTimeSaveListener listener);
-
-    /**
      * 横向加载框
      */
     BuildBean assignLoadingHorizontal(Context context, CharSequence msg, boolean cancleable, boolean outsideTouchable, boolean isWhiteBg);

@@ -16,11 +16,9 @@ import com.zysm.curtain.mwidgetgroup.dialog.DialogUIUtils;
 import com.zysm.curtain.mwidgetgroup.dialog.PopuBean;
 import com.zysm.curtain.mwidgetgroup.dialog.TieBean;
 import com.zysm.curtain.mwidgetgroup.dialog.adapter.TieAdapter;
-import com.zysm.curtain.mwidgetgroup.dialog.listener.DialogUIDateTimeSaveListener;
 import com.zysm.curtain.mwidgetgroup.dialog.listener.DialogUIItemListener;
 import com.zysm.curtain.mwidgetgroup.dialog.listener.DialogUIListener;
 import com.zysm.curtain.mwidgetgroup.dialog.listener.TdataListener;
-import com.zysm.curtain.mwidgetgroup.dialog.widget.DateSelectorWheelView;
 import com.zysm.curtain.mwidgetgroup.dialog.widget.PopuWindowView;
 
 import java.util.ArrayList;
@@ -51,7 +49,7 @@ public class DialogActivity extends AppCompatActivity {
 
     String msg = "别总是来日方长，这世上挥手之间的都是人走茶凉。";
 
-    @OnClick({R.id.btn_toast_top, R.id.btn_toast_center, R.id.btn_toast, R.id.btn_custom_bottom_alert, R.id.btn_popu, R.id.btn_select_ymd, R.id.btn_select_ymdhm, R.id.btn_select_ymdhms, R.id.btn_dialog, R.id.btn_loading_vertical, R.id.btn_loading_horizontal, R.id.btn_loading_vertical_gray, R.id.btn_loading_horizontal_gray, R.id.btn_md_loading_vertical, R.id.btn_md_loading_horizontal, R.id.btn_md_alert, R.id.btn_tie_alert, R.id.btn_alert_horizontal,
+    @OnClick({R.id.btn_toast_top, R.id.btn_toast_center, R.id.btn_toast, R.id.btn_custom_bottom_alert, R.id.btn_popu, R.id.btn_dialog, R.id.btn_loading_vertical, R.id.btn_loading_horizontal, R.id.btn_loading_vertical_gray, R.id.btn_loading_horizontal_gray, R.id.btn_md_loading_vertical, R.id.btn_md_loading_horizontal, R.id.btn_md_alert, R.id.btn_tie_alert, R.id.btn_alert_horizontal,
             R.id.btn_alert_vertical, R.id.btn_bottom_sheet_cancel, R.id.btn_center_sheet, R.id.btn_alert_input,
             R.id.btn_alert_multichoose, R.id.btn_alert_singlechoose, R.id.btn_md_bottom_vertical, R.id.btn_md_bottom_horizontal, R.id.btn_custom_alert})
     public void onClick(View view) {
@@ -85,33 +83,6 @@ public class DialogActivity extends AppCompatActivity {
                 });
                 popuWindowView.showing(btnPopu);
                 break;
-            case R.id.btn_select_ymd: {
-                DialogUIUtils.showDatePick(mActivity, Gravity.CENTER, "选择日期", System.currentTimeMillis() + 60000, DateSelectorWheelView.TYPE_YYYYMM, 0, new DialogUIDateTimeSaveListener() {
-                    @Override
-                    public void onSaveSelectedDate(int tag, String selectedDate) {
-
-                    }
-                }).show();
-            }
-            break;
-            case R.id.btn_select_ymdhm: {
-                DialogUIUtils.showDatePick(mActivity, Gravity.CENTER, "选择日期", System.currentTimeMillis() + 60000, DateSelectorWheelView.TYPE_YYYYMMDDHHMM, 0, new DialogUIDateTimeSaveListener() {
-                    @Override
-                    public void onSaveSelectedDate(int tag, String selectedDate) {
-
-                    }
-                }).show();
-            }
-            break;
-            case R.id.btn_select_ymdhms: {
-                DialogUIUtils.showDatePick(mActivity, Gravity.BOTTOM, "选择日期", System.currentTimeMillis() + 60000, DateSelectorWheelView.TYPE_YYYYMMDD, 0, new DialogUIDateTimeSaveListener() {
-                    @Override
-                    public void onSaveSelectedDate(int tag, String selectedDate) {
-
-                    }
-                }).show();
-            }
-            break;
             case R.id.btn_custom_alert:
                 View rootView = View.inflate(mActivity, R.layout.custom_dialog_layout, null);
                 final Dialog dialog = DialogUIUtils.showCustomAlert(this, rootView, Gravity.CENTER, true, false).show();

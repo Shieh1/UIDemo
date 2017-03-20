@@ -41,24 +41,6 @@
                 android:text="popuwindow"/>
 
             <Button
-                android:id="@+id/btn_select_ymd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="选择日期年月日"/>
-
-            <Button
-                android:id="@+id/btn_select_ymdhm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="选择日期年月日时分"/>
-
-            <Button
-                android:id="@+id/btn_select_ymdhms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="选择日期年月日时分秒"/>
-
-            <Button
                 android:id="@+id/btn_custom_alert"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

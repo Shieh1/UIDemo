@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.zysm.curtain.mwidgetgroup.R;
 import com.zysm.curtain.mwidgetgroup.dialog.listener.DialogAssigner;
-import com.zysm.curtain.mwidgetgroup.dialog.listener.DialogUIDateTimeSaveListener;
 import com.zysm.curtain.mwidgetgroup.dialog.listener.DialogUIItemListener;
 import com.zysm.curtain.mwidgetgroup.dialog.listener.DialogUIListener;
 import com.zysm.curtain.mwidgetgroup.dialog.utils.ToolUtils;
@@ -97,22 +96,6 @@ public class DialogUIUtils {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
-    }
-
-    /***
-     * 弹出日期选择器
-     *
-     * @param context   上下文
-     * @param gravity   显示位置
-     * @param dateTitle 显示标题
-     * @param date      当前选择日志
-     * @param dateType  显示日期样式DateSelectorWheelView.TYPE_YYYYMMDD TYPE_YYYYMMDDHHMM TYPE_YYYYMMDDHHMMSS
-     * @param tag       view标记tag 一个页面多个日期选择器是可以加标记区分
-     * @param listener
-     * @return
-     */
-    public static BuildBean showDatePick(Context context, int gravity, String dateTitle, long date, int dateType, int tag, DialogUIDateTimeSaveListener listener) {
-        return DialogAssigner.getInstance().assignDatePick(context, gravity, dateTitle, date, dateType, tag, listener);
     }
 
     /**
