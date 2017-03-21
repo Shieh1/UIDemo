@@ -21,8 +21,10 @@
         <activity android:name=".DatePickDialogActivity" />
         <activity android:name=".VLayoutActivity" />
         <activity android:name=".DialogActivity" />
-        <activity android:name=".CoordinatorTabActivity"
-            android:theme="@style/AppThemeForCoordinator"></activity>
+        <activity
+            android:name=".CoordinatorTabActivity"
+            android:theme="@style/AppThemeForCoordinator" />
+        <activity android:name=".AlerterActivity"></activity>
     </application>
 
 </manifest>

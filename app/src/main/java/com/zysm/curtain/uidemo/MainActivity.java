@@ -21,17 +21,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
         ButterKnife.bind(this);
+
         mContext = this;
     }
 
     @OnClick({R.id.m_refresh_list_view_button,
+
             R.id.m_refresh_scroll_view_button,
+
             R.id.m_bottom_date_picker_button,
+
             R.id.m_dialog_button,
+
             R.id.m_coordinator_button,
+
+            R.id.m_alert_button,
+
             R.id.m_test_button})
+
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.m_refresh_list_view_button:
@@ -49,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.m_coordinator_button:
                 ToActivityUtil.toNextActivity(mContext, CoordinatorTabActivity.class);
                 break;
+            case R.id.m_alert_button:
+                ToActivityUtil.toNextActivity(mContext, AlerterActivity.class);
+                break;
+
             case R.id.m_test_button:
                 ToActivityUtil.toNextActivity(mContext, VLayoutActivity.class);
                 break;

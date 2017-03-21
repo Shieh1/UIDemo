@@ -23,4 +23,6 @@
     <string name="picker_hour">时</string>
     <string name="picker_minute">分</string>
 
+    <string name="msg.alert_cleared">Alert Cleared</string>
+    <string name="msg.no_alert_showing">No Alert Showing</string>
 </resources>
