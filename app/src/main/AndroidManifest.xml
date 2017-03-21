@@ -20,7 +20,9 @@
         <activity android:name=".MRefreshScrollViewActivity" />
         <activity android:name=".DatePickDialogActivity" />
         <activity android:name=".VLayoutActivity" />
-        <activity android:name=".DialogActivity"></activity>
+        <activity android:name=".DialogActivity" />
+        <activity android:name=".CoordinatorTabActivity"
+            android:theme="@style/AppThemeForCoordinator"></activity>
     </application>
 
 </manifest>
